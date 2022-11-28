@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSVFileFormattor"
         mc:Ignorable="d"
-        Title="CSV File Formattor" Height="180" Width="440">
+        Title="CSV File Formattor" Height="180" Width="440" Icon="/icons8-transaction-78.png">
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="40,20,0,0" TextWrapping="Wrap" Text="Quickly format CSV files before uploading to the Goodbudget™ tool." VerticalAlignment="Top"/>
         <Label Content="Select File:" HorizontalAlignment="Left" Margin="40,60,0,0" VerticalAlignment="Top" Padding="0,5,5,5"/>
