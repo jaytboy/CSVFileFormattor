@@ -11,7 +11,8 @@
         <Label Content="Select File:" HorizontalAlignment="Left" Margin="40,60,0,0" VerticalAlignment="Top" Padding="0,5,5,5"/>
         <TextBox x:Name="tb_FolderLocation" HorizontalAlignment="Left" Margin="116,63,0,0" Text="" VerticalAlignment="Top" Width="240" Height="20" TabIndex="1" FlowDirection="RightToLeft"/>
         <Button x:Name="bt_Browse" Content="Browse" HorizontalAlignment="Left" Margin="361,63,0,0" VerticalAlignment="Top" TabIndex="2" Click="bt_Browse_Click"/>
-        <Button x:Name="bt_Process" Content="Process" HorizontalAlignment="Center" Margin="0,100,0,0" VerticalAlignment="Top" TabIndex="3" Click="bt_Process_Click"/>
+        <Button x:Name="bt_Process" Content="Process" HorizontalAlignment="Center" Margin="0,110,0,0" VerticalAlignment="Top" TabIndex="3" Click="bt_Process_Click"/>
+        <TextBlock x:Name="tbl_Notification" HorizontalAlignment="Left" Margin="40,91,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="10" Foreground="#FF007E00"/>
 
     </Grid>
 </Window>

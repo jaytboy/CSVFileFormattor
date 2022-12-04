@@ -19,6 +19,14 @@ using Microsoft.VisualBasic.FileIO;
 using Microsoft.VisualBasic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Security.Principal;
+using System.Globalization;
+using CsvHelper;
+using System.Windows.Media.Animation;
+using CsvHelper.Configuration;
+
+// TODO:
+// - Add right click easter egg that gives random messages.
 
 namespace CSVFileFormattor
 {
@@ -47,88 +55,90 @@ namespace CSVFileFormattor
                 {
                     this.tb_FolderLocation.Text = System.IO.Path.GetFullPath(fileName);
                 }
-                catch (Exception)
+                catch (Exception e1)
                 {
+                    MessageBox.Show(e1.Message);
                 }
             }
         }
-
         private void bt_Process_Click(object sender, RoutedEventArgs e)
         {
-            List<StringDictionary> rows = new List<StringDictionary>();
-            using (TextFieldParser reader = Microsoft.VisualBasic.FileIO.FileSystem.OpenTextFieldParser(this.tb_FolderLocation.Text, ","))
+            try
             {
-                if (reader != null)
-                {
-                    int i = 0;
-                    string[]? currentRow = new string[8];
-                    string[] headers = new string[8];
+                using var reader = new StreamReader(tb_FolderLocation.Text);
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                csv.Context.RegisterClassMap<TransactionMap>();
+                var records = csv.GetRecords<Transaction>().ToList();
 
-                    while (!reader.EndOfData)
+                string folder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
+
+                string fileday = records[records.Count() - 1].PostDate.ToString("dd");
+                string filemonth = records[records.Count() - 1].PostDate.ToString("MMM");
+                string fileyear = records[records.Count() - 1].PostDate.ToString("yyyy");
+                string filename = GetUniqueName(folder, $"gb-{fileyear}{filemonth}{fileday}Transactions.csv");
+
+                using StreamWriter sw = new(filename);
+                sw.WriteLine("Date,Name,Amount");
+                foreach (Transaction record in records)
+                {
+                    if (record.Debit == null)
                     {
-                        try
-                        {
-                            StringDictionary row = new StringDictionary();
-                            currentRow = reader.ReadFields();
-                            if (i == 0)
-                            {
-                                for (int j = 0; j < currentRow.Length; j++)
-                                {
-                                    headers[j] = currentRow[j].ToString();
-                                }
-                            }
-                            else
-                            {
-                                for (int j = 0; j < currentRow.Length; j++)
-                                {
-                                    row.Add(headers[j], currentRow[j].ToString());
-                                }
-                                rows.Add(row);
-                            }
-                        }
-                        catch (MalformedLineException)
-                        {
-                            MessageBox.Show("Line " + e.Source + "is not valid and will be skipped.");
-                            throw;
-                        }
-                        i++;
+                        sw.WriteLine($"{record.PostDate:MM/dd/yyyy},{record.Description},{record.Credit}");
+                    }
+                    else
+                    {
+                        sw.WriteLine($"{record.PostDate:MM/dd/yyyy},{record.Description},-{record.Debit}");
                     }
                 }
-                else
-                {
-                    MessageBox.Show("File contains no data!");
-                }
-            }
-
-            string folder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
-            string filemonth = Convert.ToDateTime(rows[0]["Post Date"]).ToString("MMM");
-            string fileyear = Convert.ToDateTime(rows[0]["Post Date"]).ToString("yyyy");
-            string filename = $"{folder}\\gb-{fileyear}{filemonth}Transactions.csv";
-
-            if (!File.Exists(filename))
-            {
-                using (StreamWriter sw = new StreamWriter(filename))
-                {
-                    sw.WriteLine("Date,Name,Amount");
-                    foreach (StringDictionary row in rows)
-                    {
-                        if (row["Debit"] == "")
-                        {
-                            sw.WriteLine($"{row["Post Date"]},{row["Description"]},{row["Credit"]}");
-                        }
-                        else
-                        {
-                            sw.WriteLine($"{row["Post Date"]},{row["Description"]},-{row["Debit"]}");
-                        }
-                    }
-                }
-                MessageBox.Show("File Processed!");
-                this.tb_FolderLocation.Text = "";
-            } else
-            {
-                MessageBox.Show("File already exists!\nPlease select a new file.");
+                this.tbl_Notification.Text = $"{System.IO.Path.GetFileName(filename)} - Created Successfully!";
                 this.tb_FolderLocation.Text = "";
             }
+            catch (CsvHelper.TypeConversion.TypeConverterException e1)
+            {
+                MessageBox.Show(e1.Message);
+                throw;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("An error occured!");
+            }
+        }
+        private static string GetUniqueName(string folder, string name)
+        {
+            string validName = System.IO.Path.Combine(folder, name);
+            string namewoExt = System.IO.Path.GetFileNameWithoutExtension(validName);
+            string extension = System.IO.Path.GetExtension(validName);
+            int copyNumber = 1;
+            while (File.Exists(validName))
+            {
+                validName = $"{namewoExt}({copyNumber++}).{extension}";
+            }
+            return validName;
+        }
+    }
+    public class Transaction
+    {
+        public string? AccountNumber { get; set; }
+        public DateTime PostDate { get; set; }
+        public string? Check { get; set; }
+        public string? Description { get; set; }
+        public double? Debit { get; set; }
+        public double? Credit { get; set; }
+        public string? Status { get; set; }
+        public double? Balance { get; set; }
+    }
+    public sealed class TransactionMap : ClassMap<Transaction>
+    {
+        public TransactionMap()
+        {
+            Map(m => m.AccountNumber).Name("Account Number");
+            Map(m => m.PostDate).Name("Post Date");
+            Map(m => m.Check);
+            Map(m => m.Description);
+            Map(m => m.Debit);
+            Map(m => m.Credit);
+            Map(m => m.Status).Ignore();
+            Map(m => m.Balance).Ignore();
         }
     }
 }
