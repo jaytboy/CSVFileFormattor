@@ -1,12 +1,12 @@
 # CSV formattor for Uploading to GoodBudget™
 Converts a csv file downloaded from a specific bank to the format required by GoodBudget™.
 
-__**What's new in v1.0.0?**__
+**What's new in v1.0.0?**
 - Use a better csv parser.
     - Faster than the stardard parser for C#.
     - Column feilds have a type. This allows a quick data check to make sure the feilds are being parsed correctly.
     - Provides helpful error messages if the file cannot be parsed. This includes line numbers so you can quickly got to the line that is causing the error in your favorite text editor and fix the issue.
-    - Addition of a "Hint" button. The hints do not help you with the function of the program but you might enjoy them.
+- Addition of a "Hint" button. The hints do not help you with the function of the program but you might enjoy them.
 
 ### Compatible OS
 - Windows OS.
