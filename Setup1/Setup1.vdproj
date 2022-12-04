@@ -21,7 +21,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7599EE405B7241A8B2548497C0244B4A"
+        "MsmKey" = "8:_6BADB7229E50485C90039380F811A2BE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ABACA0BA618E43778E0E96A001338B7E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -82,6 +88,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -114,12 +128,32 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7599EE405B7241A8B2548497C0244B4A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6BADB7229E50485C90039380F811A2BE"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\Downloads\\icons8-transaction-78.ico"
+            "SourcePath" = "8:..\\CSVFileFormattor\\bin\\icons8-transaction-78.ico"
             "TargetName" = "8:icons8-transaction-78.ico"
             "Tag" = "8:"
             "Folder" = "8:_62F8E3F4D16C47678CD37A9BFCDE8441"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABACA0BA618E43778E0E96A001338B7E"
+            {
+            "SourcePath" = "8:..\\CSVFileFormattor\\bin\\icons8-transaction-78.ico"
+            "TargetName" = "8:icons8-transaction-78.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_94DEC1A5F81E4A92B0CDC39CD71FF006"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -322,7 +356,7 @@
             "Target" = "8:_25E641A23B774672BAE9D56C180D3986"
             "Folder" = "8:_903B784FBD374301A611213462050EC3"
             "WorkingFolder" = "8:_62F8E3F4D16C47678CD37A9BFCDE8441"
-            "Icon" = "8:_7599EE405B7241A8B2548497C0244B4A"
+            "Icon" = "8:_6BADB7229E50485C90039380F811A2BE"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A09A8E767D2240A8B7ECBB863C40B595"
@@ -336,7 +370,7 @@
             "Target" = "8:_25E641A23B774672BAE9D56C180D3986"
             "Folder" = "8:_94DEC1A5F81E4A92B0CDC39CD71FF006"
             "WorkingFolder" = "8:_62F8E3F4D16C47678CD37A9BFCDE8441"
-            "Icon" = "8:_7599EE405B7241A8B2548497C0244B4A"
+            "Icon" = "8:_ABACA0BA618E43778E0E96A001338B7E"
             "Feature" = "8:"
             }
         }

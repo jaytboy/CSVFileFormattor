@@ -13,6 +13,7 @@
         <Button x:Name="bt_Browse" Content="Browse" HorizontalAlignment="Left" Margin="361,63,0,0" VerticalAlignment="Top" TabIndex="2" Click="bt_Browse_Click"/>
         <Button x:Name="bt_Process" Content="Process" HorizontalAlignment="Center" Margin="0,110,0,0" VerticalAlignment="Top" TabIndex="3" Click="bt_Process_Click"/>
         <TextBlock x:Name="tbl_Notification" HorizontalAlignment="Left" Margin="40,91,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="10" Foreground="#FF007E00"/>
+        <Button x:Name="bt_Tips" Content="Hints" HorizontalAlignment="Left" Margin="366,110,0,0" VerticalAlignment="Top" Click="bt_Tips_Click"/>
 
     </Grid>
 </Window>
