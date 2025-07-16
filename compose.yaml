@@ -1,0 +1,151 @@
+version: '3.8'
+services:
+  # Shared Database (PostgreSQL for Firefly III, Firefly III Importer, Paperless-ngx, and Nextcloud)
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=securepassword
+      - POSTGRES_DB=shared_db
+      - POSTGRES_MAX_CONNECTIONS=50
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # Firefly III
+  firefly:
+    image: fireflyiii/core:latest
+    environment:
+      - APP_URL=http://localhost:8081
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_CONNECTION=pgsql
+      - DB_DATABASE=firefly
+      - DB_USERNAME=admin
+      - DB_PASSWORD=securepassword
+    depends_on:
+      - db
+    ports:
+      - "8081:8080"
+    volumes:
+      - firefly_data:/var/www/html/storage
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # Firefly III Data Importer
+  firefly-importer:
+    image: fireflyiii/data-importer:latest
+    environment:
+      - FIREFLY_III_URL=http://firefly:8080
+      - FIREFLY_III_ACCESS_TOKEN=your_firefly_access_token
+    depends_on:
+      - firefly
+    ports:
+      - "8084:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 256M
+
+  # Paperless-ngx
+  paperless:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    environment:
+      - PAPERLESS_DBHOST=db
+      - PAPERLESS_DBPORT=5432
+      - PAPERLESS_DBNAME=paperless
+      - PAPERLESS_DBUSER=admin
+      - PAPERLESS_DBPASS=securepassword
+      - PAPERLESS_URL=http://localhost:8082
+    depends_on:
+      - db
+    ports:
+      - "8082:8000"
+    volumes:
+      - paperless_data:/usr/src/paperless/data
+      - paperless_media:/usr/src/paperless/media
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # Nextcloud
+  nextcloud:
+    image: nextcloud:29
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=securepassword
+      - NEXTCLOUD_TRUSTED_DOMAINS=localhost
+    depends_on:
+      - db
+    ports:
+      - "8083:80"
+    volumes:
+      - nextcloud_data:/var/www/html
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 768M
+
+  # Home Assistant
+  homeassistant:
+    image: homeassistant/home-assistant:latest
+    volumes:
+      - homeassistant_data:/config
+    ports:
+      - "8123:8123"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    privileged: true # Required for Home Assistant to access hardware (e.g., Zigbee)
+
+  # Grocy
+  grocy:
+    image: linuxserver/grocy:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - grocy_data:/config
+    ports:
+      - "8085:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 256M
+
+volumes:
+  db_data:
+  firefly_data:
+  paperless_data:
+  paperless_media:
+  nextcloud_data:
+  homeassistant_data:
+  grocy_data:
+
+networks:
+  default:
+    driver: bridge
